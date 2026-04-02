@@ -6,7 +6,6 @@ const prisma = new PrismaClient()
 
 async function main() {
   // Clean up
-  await prisma.tag.deleteMany({}) // Wait, the model is NoticeTag
   await prisma.noticeTag.deleteMany({})
   await prisma.interest.deleteMany({})
   await prisma.notice.deleteMany({})
