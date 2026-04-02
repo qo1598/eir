@@ -1,12 +1,19 @@
-// src/app/(protected)/layout.tsx
-
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { AppHeader } from "@/components/common/AppHeader";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get("research_user_name");
+
+  if (!authCookie) {
+    redirect("/login");
+  }
+
   return (
     <>
       <AppHeader />
