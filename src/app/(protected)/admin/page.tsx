@@ -1,6 +1,7 @@
 // src/app/admin/page.tsx
 
 import { prisma } from "@/lib/db/prisma"
+export const dynamic = "force-dynamic"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table" // Need to add table
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

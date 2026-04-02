@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import { prisma } from "@/lib/db/prisma"
 import { NoticeList } from "@/components/notice/NoticeList"
 import { FilterToolbar } from "@/components/notice/FilterToolbar"

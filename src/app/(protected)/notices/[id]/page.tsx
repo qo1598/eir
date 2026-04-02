@@ -1,6 +1,7 @@
 // src/app/notices/[id]/page.tsx
 
 import { prisma } from "@/lib/db/prisma"
+export const dynamic = "force-dynamic"
 import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
