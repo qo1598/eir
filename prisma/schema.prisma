@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Notice {
+  id               String       @id @default(uuid())
+  sourceType       String       // 'official' | 'manual'
+  title            String
+  summary          String?
+  body             String?
+  senderName       String?
+  documentNumber   String?
+  registeredAt     DateTime?
+  firstSentAt      DateTime?
+  deadlineAt       DateTime?
+  categoryMain     String?      // '디지털', 'AI', '정보'
+  categorySub      String?
+  importanceLevel  String       // 'high' | 'medium' | 'low'
+  visibilityStatus String       // 'public' | 'hidden'
+  pinned           Boolean      @default(false)
+  officialLink     String?
+  attachmentName   String?
+  rawTitle         String?
+  autoFiltered     Boolean      @default(false)
+  autoTagged       Boolean      @default(false)
+  createdBy        String?
+  uploadBatchId    String?
+
+  tags             NoticeTag[]
+  interests        Interest[]
+  uploadBatch      UploadBatch? @relation(fields: [uploadBatchId], references: [id])
+
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  deletedAt        DateTime?
+
+  @@index([sourceType])
+  @@index([registeredAt])
+  @@index([categoryMain])
+  @@index([importanceLevel])
+  @@index([pinned])
+}
+
+model NoticeTag {
+  id         String   @id @default(uuid())
+  noticeId   String
+  tagType    String   // 'theme' | 'participation' | 'status' | 'custom'
+  tagName    String
+  tagSource  String   // 'auto' | 'manual'
+  createdAt  DateTime @default(now())
+
+  notice     Notice   @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+
+  @@index([noticeId])
+  @@index([tagName])
+  @@index([tagType])
+}
+
+model Interest {
+  id           String   @id @default(uuid())
+  noticeId     String
+  affiliation  String
+  name         String
+  interestType String   // '관심 있음' | '더 알고 싶음' | '추후 안내 희망' | '참여 가능성 검토 중'
+  memo         String?
+  isActive     Boolean  @default(true)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  notice       Notice   @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+
+  @@index([noticeId])
+  @@index([name, affiliation])
+  @@index([createdAt])
+}
+
+model UploadBatch {
+  id               String   @id @default(uuid())
+  originalFilename String
+  totalRows        Int      @default(0)
+  insertedRows     Int      @default(0)
+  duplicatedRows   Int      @default(0)
+  errorRows        Int      @default(0)
+  uploadedBy       String?
+  uploadedAt       DateTime @default(now())
+  status           String   // 'processing' | 'done' | 'failed'
+
+  notices          Notice[]
+  uploadRows       UploadRow[]
+
+  @@index([uploadedAt])
+}
+
+model UploadRow {
+  id                 String   @id @default(uuid())
+  uploadBatchId      String
+  rowIndex           Int
+  rawPayload         String   // JSON string
+  parsedTitle        String?
+  parsedSender       String?
+  parsedRegisteredAt DateTime?
+  processStatus      String   // 'inserted' | 'duplicated' | 'error' | 'skipped'
+  errorMessage       String?
+  createdNoticeId    String?
+
+  uploadBatch        UploadBatch @relation(fields: [uploadBatchId], references: [id], onDelete: Cascade)
+}
