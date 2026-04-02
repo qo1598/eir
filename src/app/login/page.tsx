@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { RESEARCH_GROUP_MEMBERS } from "@/lib/constants/participants"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ShieldCheck, User, ArrowRight, Sparkles } from "lucide-react"
+import { User, ArrowRight } from "lucide-react"
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/'
@@ -15,11 +15,6 @@ export default function LoginPage() {
   const [name, setName] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,8 +43,6 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-
-  if (!mounted) return null
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center p-6 overflow-hidden bg-mesh animate-mesh">
@@ -101,5 +94,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full flex items-center justify-center bg-mesh">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
