@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
   '/images',
 ]
 
-export default function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   // 공개 경로는 검사 제외
