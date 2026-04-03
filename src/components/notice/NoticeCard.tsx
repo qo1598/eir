@@ -26,7 +26,7 @@ export function NoticeCard({ notice, onInterestClick }: NoticeCardProps) {
         </Badge>
       )}
 
-      <CardHeader className="p-4 pb-1.5 pt-10">
+      <CardHeader className={`p-4 pb-1.5 ${notice.pinned ? "pt-10" : "pt-4"}`}>
         <div className="flex justify-between items-start gap-3">
           <CardTitle className="text-base font-bold leading-[1.3] line-clamp-2 flex-grow">
             {notice.title}
