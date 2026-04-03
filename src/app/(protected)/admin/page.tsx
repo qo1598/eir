@@ -9,6 +9,8 @@ import { Plus, Upload, Users, FileText, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
 
+import { AdminNoticeTable } from "@/components/admin/AdminNoticeTable"
+
 async function getAdminData() {
   const notices = await prisma.notice.findMany({
     include: {
@@ -79,67 +81,14 @@ export default async function AdminDashboard() {
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm text-slate-500 font-medium">검토 필요</p>
-              <p className="text-2xl font-bold">{notices.filter((n: any) => n.visibilityStatus === 'draft').length}건</p>
+              <p className="text-sm text-slate-500 font-medium">비공개 공문</p>
+              <p className="text-2xl font-bold">{notices.filter((n: any) => n.visibilityStatus !== 'public').length}건</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-        <div className="p-6 border-b">
-          <h2 className="text-lg font-bold">최근 등록 공문 리스트</h2>
-        </div>
-        <Table>
-          <TableHeader className="bg-slate-50">
-            <TableRow>
-              <TableHead className="w-[400px]">공문 제목</TableHead>
-              <TableHead>카테고리</TableHead>
-              <TableHead>등록일</TableHead>
-              <TableHead>상태</TableHead>
-              <TableHead className="text-right">관심 교사</TableHead>
-              <TableHead className="text-right">관리</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {notices.map((notice: any) => (
-              <TableRow key={notice.id} className="hover:bg-slate-50/50">
-                <TableCell className="font-medium">
-                  {notice.title}
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline">{notice.categoryMain}</Badge>
-                </TableCell>
-                <TableCell className="text-slate-500 text-sm">
-                  {notice.registeredAt ? format(notice.registeredAt, "yyyy-MM-dd") : "-"}
-                </TableCell>
-                <TableCell>
-                  <Badge 
-                    className={notice.visibilityStatus === 'public' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-slate-100 text-slate-700 hover:bg-slate-100'}
-                  >
-                    {notice.visibilityStatus === 'public' ? '공개' : '대기'}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right font-bold text-primary">
-                  {notice._count?.interests || 0}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href={`/admin/notices/${notice.id}`}>편집</Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-            {notices.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-10 text-slate-400">
-                  등록된 공문이 없습니다.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <AdminNoticeTable initialNotices={notices} />
     </div>
   )
 }
