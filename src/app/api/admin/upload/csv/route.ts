@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
         // Stricter filtering: must contain specific keywords
         const upperTitle = normalized.title.toUpperCase()
-        const keywords = ["디지털", "AI", "인공지능", "SW", "소프트웨어", "정보"]
+        const keywords = ["디지털", "AI", "인공지능", "SW", "소프트웨어", "정보", "에듀테크"]
         const hasKeyword = keywords.some(k => upperTitle.includes(k.toUpperCase()))
         
         if (!hasKeyword) {
