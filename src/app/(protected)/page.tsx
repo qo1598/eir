@@ -16,10 +16,7 @@ async function getNoticesSafe(searchParams: { q?: string; category?: string }) {
     where.AND = []
     if (q) {
       where.AND.push({
-        OR: [
-          { title: { contains: q } },
-          { senderName: { contains: q } },
-        ]
+        title: { contains: q, mode: 'insensitive' }
       })
     }
     if (category) {
