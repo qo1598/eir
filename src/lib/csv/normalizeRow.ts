@@ -13,7 +13,7 @@ export interface NormalizedNotice {
 export function normalizeRow(row: RawCsvRow): NormalizedNotice {
   // Common Korean CSV field mappings for "문서등록대장"
   const titleKeys = ["제목", "과제명", "Title"];
-  const senderKeys = ["발신기관", "담당부서", "기안자", "보낸이", "Sender", "기안(접수)자", "수신(발신)자", "발신처"];
+  const senderKeys = ["수신(발신)자", "발신처", "발신기관", "담당부서", "보낸이", "Sender", "기안(접수)자", "기안자"];
   const docNumKeys = ["등록번호", "문서번호", "번호", "No"];
   const dateKeys = ["등록일자", "결재일자", "일자", "등록일", "Date", "결재일시", "등록일시"];
 
