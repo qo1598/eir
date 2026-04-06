@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db/prisma"
 import { NextResponse } from "next/server"
 import Papa from "papaparse"
 import { normalizeRow } from "@/lib/csv/normalizeRow"
+import { THEME_KEYWORDS } from "@/lib/tagging/keywordRules"
 import { classifyNotice } from "@/lib/tagging/classifyNotice"
 import crypto from "node:crypto"
 
@@ -52,10 +53,9 @@ export async function POST(req: Request) {
         const normalized = normalizeRow(row)
         if (!normalized.title) continue
 
-        // Stricter filtering: must contain specific keywords
+        // Stricter filtering: must contain specific keywords from THEME_KEYWORDS
         const upperTitle = normalized.title.toUpperCase()
-        const keywords = ["디지털", "AI", "인공지능", "SW", "소프트웨어", "정보", "에듀테크"]
-        const hasKeyword = keywords.some(k => upperTitle.includes(k.toUpperCase()))
+        const hasKeyword = THEME_KEYWORDS.some(k => upperTitle.includes(k.toUpperCase()))
         
         if (!hasKeyword) {
           continue
