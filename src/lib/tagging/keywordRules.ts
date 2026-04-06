@@ -14,6 +14,7 @@ export const THEME_KEYWORDS = [
   "컴퓨팅",
   "AI교육",
   "정보교육",
+  "에듀"
 ];
 
 export const PARTICIPATION_KEYWORDS = [

@@ -39,22 +39,22 @@ export default function UploadPage() {
 
   const handleParse = async () => {
     if (!file) return
-    
+
     setLoading(true)
     setResult(null)
-    
+
     const formData = new FormData()
     formData.append("file", file)
     formData.append("action", "parse")
-    
+
     try {
       const res = await fetch("/api/admin/upload/csv", {
         method: "POST",
         body: formData,
       })
-      
+
       const data = await res.json()
-      
+
       if (res.ok) {
         if (data.data.length === 0) {
           setResult({ success: false, error: "조건(디지털/AI)에 맞는 공문이 없습니다." })
@@ -75,23 +75,23 @@ export default function UploadPage() {
 
   const handleUpload = async () => {
     if (selectedIds.size === 0) return
-    
+
     setLoading(true)
-    
+
     const selectedData = parsedData.filter(item => selectedIds.has(item.tempId))
-    
+
     const formData = new FormData()
     formData.append("action", "upload")
     formData.append("data", JSON.stringify(selectedData))
-    
+
     try {
       const res = await fetch("/api/admin/upload/csv", {
         method: "POST",
         body: formData,
       })
-      
+
       const data = await res.json()
-      
+
       if (res.ok) {
         setResult({ success: true, count: data.count })
         setStep(1)
@@ -161,15 +161,15 @@ export default function UploadPage() {
           <CardContent className="space-y-4">
             <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-slate-300 rounded-xl bg-white">
               <Upload className="w-12 h-12 text-slate-300 mb-4" />
-              <Input 
-                type="file" 
-                accept=".csv" 
-                className="max-w-xs cursor-pointer" 
+              <Input
+                type="file"
+                accept=".csv"
+                className="max-w-xs cursor-pointer"
                 onChange={handleFileChange}
               />
               <p className="text-xs text-slate-400 mt-2">CSV 형식만 지원합니다. (UTF-8, EUC-KR)</p>
             </div>
-            
+
             {file && (
               <div className="flex items-center gap-3 p-3 bg-white border rounded-lg">
                 <FileText className="w-5 h-5 text-blue-500" />
@@ -190,8 +190,8 @@ export default function UploadPage() {
                 )}
                 <AlertTitle>{result.success ? "성공" : "실패"}</AlertTitle>
                 <AlertDescription>
-                  {result.success 
-                    ? `${result.count}건의 공문이 성공적으로 등록되었습니다.` 
+                  {result.success
+                    ? `${result.count}건의 공문이 성공적으로 등록되었습니다.`
                     : result.error}
                 </AlertDescription>
               </Alert>
@@ -243,14 +243,14 @@ export default function UploadPage() {
               <table className="w-full text-sm text-left">
                 <thead className="sticky top-0 bg-slate-100 text-slate-700 border-b">
                   <tr>
-                      <th className="p-4 w-10">
-                        <input 
-                          type="checkbox"
-                          className="w-4 h-4 rounded border-slate-300 accent-blue-600 cursor-pointer"
-                          checked={selectedIds.size === parsedData.length && parsedData.length > 0} 
-                          onChange={(e) => toggleSelectAll(e.target.checked)} 
-                        />
-                      </th>
+                    <th className="p-4 w-10">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border-slate-300 accent-blue-600 cursor-pointer"
+                        checked={selectedIds.size === parsedData.length && parsedData.length > 0}
+                        onChange={(e) => toggleSelectAll(e.target.checked)}
+                      />
+                    </th>
                     <th className="p-4 font-semibold">제목</th>
                     <th className="p-4 font-semibold">발신처</th>
                     <th className="p-4 font-semibold">등록일</th>
@@ -262,11 +262,11 @@ export default function UploadPage() {
                   {parsedData.map((item) => (
                     <tr key={item.tempId} className="hover:bg-slate-50 transition-colors">
                       <td className="p-4">
-                        <input 
+                        <input
                           type="checkbox"
                           className="w-4 h-4 rounded border-slate-300 accent-blue-600 cursor-pointer"
-                          checked={selectedIds.has(item.tempId)} 
-                          onChange={() => toggleSelectItem(item.tempId)} 
+                          checked={selectedIds.has(item.tempId)}
+                          onChange={() => toggleSelectItem(item.tempId)}
                         />
                       </td>
                       <td className="p-4 font-medium">{item.title}</td>
@@ -280,13 +280,12 @@ export default function UploadPage() {
                         </span>
                       </td>
                       <td className="p-4">
-                        <span className={`px-2 py-1 rounded text-xs ${
-                          item.importanceLevel === 'high' ? 'bg-red-100 text-red-700' :
-                          item.importanceLevel === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-slate-100 text-slate-700'
-                        }`}>
+                        <span className={`px-2 py-1 rounded text-xs ${item.importanceLevel === 'high' ? 'bg-red-100 text-red-700' :
+                            item.importanceLevel === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-slate-100 text-slate-700'
+                          }`}>
                           {item.importanceLevel === 'high' ? '높음' :
-                           item.importanceLevel === 'medium' ? '중간' : '낮음'}
+                            item.importanceLevel === 'medium' ? '중간' : '낮음'}
                         </span>
                       </td>
                     </tr>
@@ -304,7 +303,6 @@ export default function UploadPage() {
           공문 업로드 가이드
         </h3>
         <ul className="text-sm text-blue-800 space-y-1 list-disc pl-5">
-          <li className="font-semibold">제목에 "디지털" 또는 "AI"가 포함된 공문만 자동으로 추출됩니다.</li>
           <li>추출된 리스트를 확인하고 실제로 등록할 항목만 선택해 주세요.</li>
           <li>최종 등록 시 모든 공문은 자동으로 "공개" 상태로 등록됩니다.</li>
           <li>날짜 형식이 올바르지 않으면 공문 등록 시 누락될 수 있습니다.</li>
