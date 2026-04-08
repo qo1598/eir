@@ -35,7 +35,7 @@ export function NoticeCard({ notice, onInterestClick }: NoticeCardProps) {
           {/* 관심 교사 숫자 - 제목 옆으로 이동 */}
           <div className="flex items-center gap-1 text-primary font-bold text-xs bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 shrink-0 mt-0.5">
             <UserPlus className="w-3 h-3" />
-            <span>{notice._count?.interests || 0}</span>
+            <span suppressHydrationWarning>{notice._count?.interests || 0}</span>
           </div>
         </div>
       </CardHeader>
@@ -48,7 +48,7 @@ export function NoticeCard({ notice, onInterestClick }: NoticeCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="w-3.5 h-3.5 shrink-0 text-slate-400" />
-            <span>{notice.registeredAt ? format(new Date(notice.registeredAt), "yyyy-MM-dd") : "미지정"}</span>
+            <span suppressHydrationWarning>{notice.registeredAt ? format(new Date(notice.registeredAt), "yyyy-MM-dd") : "미지정"}</span>
           </div>
         </div>
       </CardContent>

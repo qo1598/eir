@@ -34,6 +34,7 @@ export function InterestModal({ isOpen, onClose, noticeId, noticeTitle }: Intere
     
     try {
       const res = await fetch("/api/interests", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, noticeId }),
       })
